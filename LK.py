@@ -2,9 +2,10 @@
 
 import numpy as np
 import cv2 as cv
-import argparse
 
 cap = cv.VideoCapture("/Users/xavierverbrugge/Documents/School/Master/2e Master/1 SEM/Computer Vision/Assignment 2/Forest_15_4_Videvo.mov")
+
+
 
 # params for ShiTomasi corner detection
 feature_params = dict(maxCorners = 100,
