@@ -30,12 +30,24 @@ The Lukas Kanade with multiple channels for color images. Finally, we have the L
 # Comparing our Average End-Point-Error statistics to the statistics of the professor
 | *Image*  | *LK MC+MR+IR*  | *Professor* |
 | ------------- | ------------- | ------------- |
-| Dimetrodon | 1.8 (0.85)| 0.392  |
-| Grove2 | 2.58 (1.01)| 0.308  |
-| Grove3 | 3.36 (2.37)| 0.988 |
-| Hydrangea | 2.2 (1.46)| 0.345  |
-| Urban2 | 8.7 (9.59)| 0.468  |
-| Urban3 | 7.65 (6.71) | 0.572  |
+| Dimetrodon | 1.95 (0.71)| 0.392  |
+| Grove2 | 3.03 (0.5)| 0.308  |
+| Grove3 | 3.84 (2.37)| 0.988 |
+| RubberWhale | 1.13 (0.49)| 0.345 |
+| Hydrangea | 3.65 (1.17)| 0.468 |
+| Urban2 | 8.32 (8.1)| 0.572  |
+| Urban3 | 7.22 (4.39) | 0.862 |
+
+| *Image*  | *LK MC+MR+IR*  | *Professor* |
+| ------------- | ------------- | ------------- |
+| Dimetrodon | 55 (13)| 8.48 (14.95)  |
+| Grove2 | 37 (6)| 4.08 (8.26)  |
+| Grove3 | 38.4 (23.1)| 8.18 (16.39 |
+| Hydrangea | 36 (14)| 9.68 (18.74)  |
+| RubberWhale | 73 (11)| 6.87 (18.46) |
+| Urban2 | 39 (29)| 7.78 (17.39) |
+| Urban3 | 27 (15) | 5.53 (16.64)  |
+
 
 
 # Conclusions
@@ -52,4 +64,4 @@ We conclude that using the information from within the color channels is informa
 
 Now, if the object were to move a larger distance then the traditional
 optical flow method would work bad. This is why, we use gaussian pyramids
-(coarse-to-fine) method to apply optical flow. Implementing the MR + IR algorithm gave us the biggest boost in performance due to Lukas-Kanade being a local approach.
+(coarse-to-fine) method to apply optical flow.
