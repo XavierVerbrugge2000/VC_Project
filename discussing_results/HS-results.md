@@ -38,3 +38,14 @@ The Horn Schunck with multiple channels for color images. Finally, we have the H
 | Urban2 | 8.52 (8.59)| 0.330  |
 | Urban3 | 7.5 (5.53) | 0.800  |
 
+# Comparing our Average Angular Error statistics to the statistics of the professor
+
+| *Image*  | *HS MC+MR+IR*  | *Professor* |
+| ------------- | ------------- | ------------- |
+| Dimetrodon | 46 (26)| 10.02 (17.03)  |
+| Grove2 | 30 (27)| 3.9 (7.96)  |
+| Grove3 | 35 (34)| 7.29 (14.91) |
+| Hydrangea | 32 (28)| 6.72 (14.09)  |
+| RubberWhale | 66 (18)| 10.70 (20.08) |
+| Urban2 | 9 (58)| 5.57 (15.93) |
+| Urban3 | 4 (54) | 12.98 (27.58)  |
