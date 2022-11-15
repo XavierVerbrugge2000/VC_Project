@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import matplotlib.colors as cl
 import numpy as np
+import cv2 as cv
 
 from src.evaluation.variables import UNKNOWN_FLOW_THRESH
 
@@ -131,7 +132,7 @@ def flow_to_image(flow=None, u: np.ndarray = None, v: np.ndarray = None):
     minv = min(minv, np.min(v))
 
     rad = np.sqrt(u**2 + v**2)
-    maxrad = max(-1, np.max(rad))
+    maxrad = max(-1, np.max(rad)) * 0.8
 
     u = u / (maxrad + np.finfo(float).eps)
     v = v / (maxrad + np.finfo(float).eps)
@@ -164,7 +165,7 @@ def visualize_flow(
         du = flow[:, :, 0]
         dv = flow[:, :, 1]
         valid = flow[:, :, 2]
-        max_flow = max(np.max(du), np.max(dv))
+        max_flow = max(np.max(du), np.max(dv)) * 0.8
         img = np.zeros((h, w, 3), dtype=np.float64)
         # angle layer
         img[:, :, 0] = np.arctan2(dv, du) / (2 * np.pi)
@@ -183,6 +184,9 @@ def visualize_flow(
         img[:, :, 0] = img[:, :, 0] * valid
         img[:, :, 1] = img[:, :, 1] * valid
         img[:, :, 2] = img[:, :, 2] * valid
+
+        img = cv.medianBlur(img, 5)
+
         # show
         plt.imshow(img)
         plt.show()

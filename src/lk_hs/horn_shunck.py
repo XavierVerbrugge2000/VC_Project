@@ -4,12 +4,15 @@ import numpy as np
 
 def images(path: str, multi_channel: bool) -> np.ndarray:
     img = cv.imread(path)
+
     if not multi_channel:
         img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
         img = img.astype(np.float32)
     else:
         for i in range(img.shape[2]):
             img[:, :, i] = img[:, :, i].astype(np.float32)
+
+    img = cv.GaussianBlur(img, (3, 3), 2)
 
     return img
 
@@ -19,20 +22,9 @@ def derivatives_computation(
     img1: np.ndarray, img2: np.ndarray
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
 
-    # X, Y, T kernel
-    kernelX = np.array([[-1, 1], [-1, 1]]) * 0.25
-    kernelY = np.array([[1, 1], [-1, -1]]) * 0.25
-    kernelT = np.ones((2, 2)) * 0.25
-
-    fx = cv.filter2D(
-        img1, -1, cv.flip(kernelX, -1), borderType=cv.BORDER_CONSTANT
-    ) + cv.filter2D(img2, -1, cv.flip(kernelX, -1), borderType=cv.BORDER_CONSTANT)
-    fy = cv.filter2D(
-        img1, -1, cv.flip(kernelY, -1), borderType=cv.BORDER_CONSTANT
-    ) + cv.filter2D(img2, -1, cv.flip(kernelY, -1), borderType=cv.BORDER_CONSTANT)
-    ft = cv.filter2D(
-        img1, -1, cv.flip(kernelT, -1), borderType=cv.BORDER_CONSTANT
-    ) + cv.filter2D(img2, -1, cv.flip(-kernelT, -1), borderType=cv.BORDER_CONSTANT)
+    fx = cv.Sobel(img1, cv.CV_64F, 1, 0, ksize=3)
+    fy = cv.Sobel(img1, cv.CV_64F, 0, 1, ksize=3)
+    ft = img2 - img1
 
     return fx, fy, ft
 
@@ -77,15 +69,32 @@ def hs(img_t: str, img_t1: str, multi_channel: bool) -> tuple[np.ndarray, np.nda
         [[1 / 12, 1 / 6, 1 / 12], [1 / 6, 0, 1 / 6], [1 / 12, 1 / 6, 1 / 12]], float
     )
 
-    alpha = 0.001
-    for _ in range(1000):
+    alpha = 10
+    itNum = 50
+    for i in range(itNum):
         # Computation of the local average
         uAvg = cv.filter2D(u, -1, cv.flip(hs_kernel, -1), borderType=cv.BORDER_CONSTANT)
         vAvg = cv.filter2D(v, -1, cv.flip(hs_kernel, -1), borderType=cv.BORDER_CONSTANT)
 
-        der = (fx * uAvg + fy * vAvg + ft) / (alpha**2 + fx**2 + fy**2)
+        der = (fx * uAvg + fy * vAvg + ft) / (alpha + fx**2 + fy**2)
 
         u = uAvg - fx * der
         v = vAvg - fy * der
+
+        if i < (itNum - 1):
+
+            u = u * 1000
+            v = v * 1000
+
+            u = u.astype(np.uint8)
+            v = v.astype(np.uint8)
+
+            u = cv.medianBlur(u, 5)
+            u = cv.medianBlur(u, 3)
+            v = cv.medianBlur(v, 5)
+            v = cv.medianBlur(v, 3)
+
+            u = u / 1000
+            v = v / 1000
 
     return u, v
