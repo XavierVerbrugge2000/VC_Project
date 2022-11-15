@@ -254,7 +254,7 @@ def runproglk(
     ]
     (u, v) = hs_section(I1current, I2current, ue, ve)
 
-    # ========== Iterative LK for that section ===========
+    # ========== Iterative HS for that section ===========
     for l in range(1, iternum + 1):
         (u, v) = hs_section(I1current, I2current, ue, ve)
 
@@ -281,7 +281,7 @@ def runproglk(
         nlev - k - 1,
     ]
     (u, v) = hs_section(I1current, I2current, ue, ve)
-    # ========== Iterative LK for that section ===========
+    # ========== Iterative HS for that section ===========
     for l in range(1, iternum + 1):
         (u, v) = hs_section(I1current, I2current, ue, ve)
     # ============= Store U and V values ===================
@@ -303,16 +303,22 @@ def hs_mc_mr_ir(folder):
     print(folder + ": Succesfully calcualted optical flow")
     out = visualize_flow(u=ul21, v=vl21)
     # Save the flow image
-    # folder_out = 'results/results-other-color-MR-IR/'+folder+'/'
-    # cv2.imwrite(folder_out+ str(folder)+'-MR+IR.png', out)
+    # folder_out = "results/results-other-color-MR-IR-HS/" + folder + "/"
+    # cv.imwrite(
+    #     f"results/results-other-color-MR-IR-HS/{folder}/{str(folder)}-MR+IR.png", out
+    # )
 
     # Replace Nan's
     u = np.nan_to_num(ul21)
     v = np.nan_to_num(vl21)
 
     # Save the flow
-    # np.savetxt('results/results-other-color-pyramid-flow/'+folder+'-U.txt', u , fmt='%d')
-    # np.savetxt('results/results-other-color-pyramid-flow/'+folder+'-V.txt', v , fmt='%d')
+    np.savetxt(
+        "results/results-other-color-pyramid-flow-HS/" + folder + "-U.txt", u, fmt="%d"
+    )
+    np.savetxt(
+        "results/results-other-color-pyramid-flow-HS/" + folder + "-V.txt", v, fmt="%d"
+    )
 
     # Calculate statistics
     mepe, sdEpe = calc_MEPE_directory(folder, u=u, v=v)
@@ -335,3 +341,5 @@ def hs_mc_mr_ir(folder):
         + " and the standard deviation is: "
         + str(sdAngular)
     )
+
+    return out
