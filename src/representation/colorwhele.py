@@ -156,8 +156,9 @@ def visualize_flow(
     if mode == "Y":
         # Ccbcr color wheel
         img = flow_to_image(flow, u=u, v=v)
-        plt.imshow(img)
-        plt.show()
+        #plt.imshow(img)
+        #plt.show()
+        return img
     elif mode == "RGB":
         (h, w) = flow.shape[0:2]
         du = flow[:, :, 0]
