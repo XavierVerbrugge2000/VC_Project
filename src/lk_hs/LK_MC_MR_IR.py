@@ -1,5 +1,7 @@
+import matplotlib.pyplot as plt
 from scipy import signal
 import math
+import cv2
 from pylab import *
 from src.lk_hs.LK_MC import  *
 from src.representation.colorwhele import visualize_flow
@@ -21,14 +23,32 @@ def kernel(size=2):
         G.append(gmask(i, 0, s))  # equating y to 0 since we need a 1D matrix
     return G
 
+def DownSample (I): # the function applies gaussian filter and down samples the intput image by 2
+
+    tau = 0.5
+    sigma = math.sqrt(2/(4*tau))
+    I = cv2.GaussianBlur(I,(5,5),sigma)
+
+    # Resize
+
+    width = int(I.shape[1]  /2 )
+    height = int(I.shape[0] /2)
+    dim = (width, height)
+
+    # resize image
+    I_resized = cv2.resize(I, dim, interpolation = cv2.INTER_CUBIC)
+
+    return I_resized
+
+'''
 
 def DownSample(I):  # the function down samples the intput image by 2
-    ''' Algorithm: For an input image of size rxc
+     Algorithm: For an input image of size rxc
            1) Apply x mask
            2) Delete Alternate Columns
            3) Apply y mask
            4) delete alternate rows
-           The ouput image is of size (r//2)x(c//2)'''
+           The ouput image is of size (r//2)x(c//2)
 
     # Gather Kernel:
     G = kernel()
@@ -42,7 +62,7 @@ def DownSample(I):  # the function down samples the intput image by 2
         Ix.extend([signal.convolve(I[i, :, 2], G, 'same')])  # Ix*Gx = Ix
 
     Ix = array(matrix(Ix))
-    print(Ix.shape)
+
 
     # ========selecting alternate columns===========
     Ix = I
@@ -60,8 +80,9 @@ def DownSample(I):  # the function down samples the intput image by 2
     # ========selecting alternate rows===========
     Ixy = Ix
     Ixy = Ixy[::2, :, :]
-    return Ixy
 
+    return Ixy
+'''
 
 def UpSample(I, G):  # the function up samples the intput image by 2
     ''' Algorithm: For an input image of size rxc
@@ -155,6 +176,8 @@ def LK_Iterative(I1  # frame 1
             # Selecting the same window for the second frame
             # Wrap
             I2current = I2[lri:(hri + 1), lci:(hci + 1)]
+            #plt.imshow(I2current.astype('uint8'))
+            #plt.show()
 
             u_iter, v_iter,_ = LK_Multi_Channel(I1current, I2current)
 
@@ -202,6 +225,7 @@ def LK_MC_MR_IR(I1,
     l0I1 = p1[0:int((len(p1[:, 0]) // 4)), 0:int((len(p1[0, :]) // 4)), :, 2]
     l0I2 = p2[0:int((len(p2[:, 0]) // 4)), 0:int((len(p2[0, :]) // 4)), :, 2]
     u, v,_ = LK_Multi_Channel(I1, I2)
+
     # ============= Iterative LK for that section============
 
     for j in range(1, iternum + 1):
@@ -268,7 +292,7 @@ def LK_MC_MR_IR_calc_all_flows():
         folder_out = "results/results-other-color-MR-IR/" + str(folder) + "/"
         if not os.path.exists(folder_out):
             os.mkdir(folder_out)
-        cv2.imwrite(folder_out + str(folder) + "-MR+IR.png", out)
+        cv2.imwrite(folder_out + str(folder) + "-6-MR+IR.png", out)
         #Show plot
         plt.imshow(out)
         plt.show()
