@@ -38,6 +38,8 @@ The Lukas Kanade with multiple channels for color images. Finally, we have the L
 | Urban2 | 8.32 (8.1)| 0.572  |
 | Urban3 | 7.22 (4.39) | 0.862 |
 
+# Comparing our Average Angular Error statistics to the statistics of the professor
+
 | *Image*  | *LK MC+MR+IR*  | *Professor* |
 | ------------- | ------------- | ------------- |
 | Dimetrodon | 55 (13)| 8.48 (14.95)  |
