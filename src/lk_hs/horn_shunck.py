@@ -48,14 +48,24 @@ def sigle_multi_channel_derivatives(
 
 
 # main function
-def hs(img_t: str, img_t1: str, multi_channel: bool) -> tuple[np.ndarray, np.ndarray]:
+def hs(
+    multi_channel: bool,
+    img_t_path: str = None,
+    img_t1_path: str = None,
+    img_t: np.ndarray = None,
+    img_t1: np.ndarray = None,
+) -> tuple[np.ndarray, np.ndarray]:
     """
-    img_t: path to the image in time t
-    img_t1: path to the image in time t+1
+    img_t_path: path to the image in time t
+    img_t1_path: path to the image in time t+1
     multi_channel: True if colored image, False for gray images
     """
-    img1 = images(path=img_t, multi_channel=multi_channel)
-    img2 = images(path=img_t1, multi_channel=multi_channel)
+    if img_t_path and img_t1_path:
+        img1 = images(path=img_t_path, multi_channel=multi_channel)
+        img2 = images(path=img_t1_path, multi_channel=multi_channel)
+    else:
+        img1 = img_t
+        img2 = img_t1
 
     fx, fy, ft = sigle_multi_channel_derivatives(multi_channel, img1=img1, img2=img2)
 
